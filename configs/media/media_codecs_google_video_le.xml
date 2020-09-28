@@ -45,25 +45,25 @@
         </MediaCodec>
         <MediaCodec name="OMX.google.hevc.decoder" type="video/hevc">
             <!-- profiles and levels:  ProfileMain : MainTierLevel51 -->
-            <Limit name="size" min="2x2" max="1280x720" />
+            <Limit name="size" min="2x2" max="1920x1088" />
             <Limit name="alignment" value="2x2" />
             <Limit name="block-size" value="8x8" />
-            <Limit name="block-count" range="1-14400" />
+            <Limit name="block-count" range="1-65536" />
             <Limit name="blocks-per-second" range="1-491520" />
             <Limit name="bitrate" range="1-5000000" />
             <Feature name="adaptive-playback" />
         </MediaCodec>
         <MediaCodec name="OMX.google.vp8.decoder" type="video/x-vnd.on2.vp8">
-            <Limit name="size" min="2x2" max="1280x720" />
+            <Limit name="size" min="2x2" max="1920x1088" />
             <Limit name="alignment" value="2x2" />
             <Limit name="block-size" value="16x16" />
-            <Limit name="block-count" range="1-3600" /> <!-- max 2048x1024 -->
-            <Limit name="blocks-per-second" range="1-108000" />
+            <Limit name="block-count" range="1-8192" /> <!-- max 2048x1024 -->
+            <Limit name="blocks-per-second" range="1-500000" />
             <Limit name="bitrate" range="1-40000000" />
             <Feature name="adaptive-playback" />
         </MediaCodec>
         <MediaCodec name="OMX.google.vp9.decoder" type="video/x-vnd.on2.vp9">
-            <Limit name="size" min="2x2" max="1280x720" />
+            <Limit name="size" min="2x2" max="1280x1280" />
             <Limit name="alignment" value="2x2" />
             <Limit name="block-size" value="16x16" />
             <Limit name="block-count" range="1-3600" /> <!-- max 1280x720 -->
@@ -100,7 +100,7 @@
         </MediaCodec>
         <MediaCodec name="OMX.google.vp8.encoder" type="video/x-vnd.on2.vp8">
             <!-- profiles and levels:  ProfileMain : Level_Version0-3 -->
-            <Limit name="size" min="2x2" max="1280x720" />
+            <Limit name="size" min="2x2" max="1280x1280" />
             <Limit name="alignment" value="2x2" />
             <Limit name="block-size" value="16x16" />
             <Limit name="block-count" range="1-3600" /> <!-- max 1280x720 -->

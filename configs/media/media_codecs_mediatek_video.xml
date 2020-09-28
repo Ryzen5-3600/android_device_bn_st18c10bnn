@@ -110,7 +110,7 @@ Only the three quirks included above are recognized at this point:
             <Quirk name="wants-NAL-fragments" />
             <Quirk name="requires-allocate-on-input-ports" />
             <Quirk name="requires-allocate-on-output-ports" />
-            <Limit name="concurrent-instances" max="6" />
+            <Limit name="concurrent-instances" max="8" />
             <Feature name="adaptive-playback"/>
         </MediaCodec>
         <MediaCodec name="OMX.MTK.VIDEO.DECODER.VC1" type="video/x-ms-wmv" >
@@ -163,13 +163,13 @@ Only the three quirks included above are recognized at this point:
             <Limit name="concurrent-instances" max="8" />
         </MediaCodec>
         <MediaCodec name="OMX.MTK.VIDEO.ENCODER.AVC" type="video/avc" >
-            <Limit name="size" min="128x96" max="1280x720" />
-            <Limit name="alignment" value="2x2" />
+            <Limit name="size" min="160x128" max="1280x720" />
+            <Limit name="alignment" value="16x16" />
             <Limit name="block-size" value="16x16" />
             <Quirk name="requires-allocate-on-input-ports" />
             <Quirk name="requires-allocate-on-output-ports" />
+            <Feature name="can-swap-width-height"/>
             <Limit name="concurrent-instances" max="8" />
-            <Feature name="can-swap-width-height" />
         </MediaCodec>
         <MediaCodec name="OMX.MTK.VIDEO.ENCODER.HEVC" type="video/hevc" >
         	  <Limit name="size" min="128x96" max="1280x720" />
