@@ -15,5 +15,5 @@
  */
 #ifndef _BDROID_BUILDCFG_H
 #define _BDROID_BUILDCFG_H
-#define BTM_DEF_LOCAL_NAME   "Nook Tablet 7"
+#define BTM_DEF_LOCAL_NAME   "Nook Tablet 10.1"
 #endif
