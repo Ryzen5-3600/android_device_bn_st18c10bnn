@@ -181,11 +181,11 @@
         </interface>
     </hal>
     <hal format="hidl">
-        <name>android.hardware.vibrator</name>
+        <name>android.hardware.thermal</name>
         <transport>hwbinder</transport>
         <version>1.0</version>
         <interface>
-            <name>IVibrator</name>
+            <name>IThermal</name>
             <instance>default</instance>
         </interface>
     </hal>
@@ -208,11 +208,42 @@
         </interface>
     </hal>
     <hal format="hidl">
+        <name>vendor.mediatek.hardware.camera.advcam</name>
+        <transport>hwbinder</transport>
+        <version>1.0</version>
+        <interface>
+            <name>IAdvCamControl</name>
+            <instance>internal/0</instance>
+        </interface>
+    </hal>
+    <hal format="hidl">
+        <name>vendor.mediatek.hardware.camera.callbackclient</name>
+        <transport>hwbinder</transport>
+        <version>1.0</version>
+        <interface>
+            <name>IMtkBufferCallback</name>
+            <instance>internal/0</instance>
+        </interface>
+        <interface>
+            <name>IMtkCallbackClient</name>
+            <instance>internal/0</instance>
+        </interface>
+    </hal>
+    <hal format="hidl">
         <name>vendor.mediatek.hardware.camera.ccap</name>
         <transport>hwbinder</transport>
         <version>1.0</version>
         <interface>
             <name>ICCAPControl</name>
+            <instance>internal/0</instance>
+        </interface>
+    </hal>
+    <hal format="hidl">
+        <name>vendor.mediatek.hardware.camera.lomoeffect</name>
+        <transport>hwbinder</transport>
+        <version>1.0</version>
+        <interface>
+            <name>ILomoEffect</name>
             <instance>internal/0</instance>
         </interface>
     </hal>
