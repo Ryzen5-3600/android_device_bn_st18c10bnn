@@ -14,8 +14,8 @@
 # limitations under the License.
 
 $(call inherit-product, $(SRC_TARGET_DIR)/product/full_base.mk)
-LOCAL_PATH := device/bn/st18c7bnn
-DEVICE_FOLDER := device/bn/st18c7bnn
+LOCAL_PATH := device/bn/st18c10bnn
+DEVICE_FOLDER := device/bn/st18c10bnn
 
 # Build Date
 PRODUCT_BUILD_PROP_OVERRIDES += BUILD_UTC_DATE=0
@@ -79,14 +79,14 @@ PRODUCT_COPY_FILES += \
 PRODUCT_PACKAGES += \
     init.connectivity.rc \
     init.modem.rc \
-    init.mt8163.rc \
+    init.mt8167.rc \
     init.project.rc \
     init.sensor_1_0.rc \
     multi_init.rc \
-    fstab.mt8163 \
-    ueventd.mt8163.rc \
-    init.recovery.mt8163.rc \
-    init.mt8163.usb.rc \
+    fstab.mt8167 \
+    ueventd.mt8167.rc \
+    init.recovery.mt8167.rc \
+    init.mt8167.usb.rc \
 
 # Seccomp
 PRODUCT_COPY_FILES += \

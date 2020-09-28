@@ -3,7 +3,7 @@
 
 set -e
 
-DEVICE=st18c7bnn
+DEVICE=st18c10bnn
 VENDOR=bn
 
 # Load extractutils and do some sanity checks

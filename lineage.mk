@@ -16,9 +16,9 @@
 # Inherit some common Lineage stuff.
 $(call inherit-product, vendor/lineage/config/common_full_tablet_wifionly.mk)
 
-# Inherit device configuration for Nook Tablet 7"
-$(call inherit-product, device/bn/st18c7bnn/lineage_st18c7bnn.mk)
+# Inherit device configuration for Nook Tablet 10.1"
+$(call inherit-product, device/bn/st18c10bnn/lineage_st18c10bnn.mk)
 
 
-PRODUCT_NAME := lineage_st18c7bnn
-PRODUCT_RELEASE_NAME := st18c7bnn
+PRODUCT_NAME := lineage_st18c10bnn
+PRODUCT_RELEASE_NAME := st18c10bnn

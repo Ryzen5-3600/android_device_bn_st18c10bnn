@@ -1,4 +1,4 @@
-DEVICE_PATH := device/bn/st18c7bnn
+DEVICE_PATH := device/bn/st18c10bnn
 BOARD_VENDOR := nook
 
 # HIDL
@@ -16,7 +16,7 @@ TARGET_SCREEN_WIDTH := 1024
 TARGET_SCREEN_HEIGHT := 600
 
 # Platform
-TARGET_BOARD_PLATFORM := mt8163
+TARGET_BOARD_PLATFORM := mt8167
 TARGET_BOARD_PLATFORM_GPU := mali-720mp2
 
 # Architecture
@@ -29,12 +29,11 @@ TARGET_BOARD_PLATFORM_GPU := mali-720mp2
 #TARGET_CPU_ABI2 := armeabi
 #TARGET_CPU_SMP := true
 #TARGET_USES_64_BIT_BINDER := true
-TARGET_ARCH := arm
-TARGET_ARCH_VARIANT := armv7-a-neon
-TARGET_CPU_ABI := armeabi-v7a
-TARGET_CPU_ABI2 := armeabi
-TARGET_CPU_VARIANT := cortex-a15
-TARGET_BOARD_SUFFIX := _32
+TARGET_ARCH := arm64
+TARGET_ARCH_VARIANT := armv8-a
+TARGET_CPU_ABI := arm64-v8a
+TARGET_CPU_ABI2 :=
+TARGET_CPU_VARIANT := generic
 
 
 # Kernel Config
@@ -53,15 +52,15 @@ TARGET_BOARD_SUFFIX := _32
 #    --tags_offset $(BOARD_KERNEL_TAGS_OFFSET)
 
 #TARGET_KERNEL_ARCH := arm64
-#TARGET_KERNEL_SOURCE := kernel/bn/st18c7bnn/
-#TARGET_KERNEL_CONFIG := st18c7bnn_defconfig
-#TARGET_KERNEL_VARIANT_CONFIG := st18c7bnn_defconfig
+#TARGET_KERNEL_SOURCE := kernel/bn/st18c10bnn/
+#TARGET_KERNEL_CONFIG := st18c10bnn_defconfig
+#TARGET_KERNEL_VARIANT_CONFIG := st18c10bnn_defconfig
 #TARGET_KERNEL_CROSS_COMPILE_PREFIX := $(shell pwd)/prebuilts/gcc/linux-x86/aarch64/#aarch64-linux-android-4.9/bin/aarch64-linux-android-
 
 #BOARD_KERNEL_CMDLINE := bootopt=64S3,32N2,64N2
 #BOARD_KERNEL_CMDLINE += androidboot.selinux=permissive
 
-TARGET_PREBUILT_KERNEL := device/bn/st18c7bnn/kernel
+TARGET_PREBUILT_KERNEL := device/bn/st18c10bnn/kernel
 #BOARD_MKBOOTIMG_ARGS := --pagesize 2048 --base 0x40078000 --kernel_offset 0x00008000 --ramdisk_offset 0x05f88000 --second_offset 0x00f00000 --tags_offset 0x0df88000
 
 TARGET_KERNEL_ARCH := arm
@@ -207,7 +206,7 @@ DEVICE_MANIFEST_FILE := $(DEVICE_PATH)/configs/manifest.xml
 DEVICE_MATRIX_FILE   := $(DEVICE_PATH)/configs/compatibility_matrix.xml
 
 # OTA assert
-TARGET_OTA_ASSERT_DEVICE:= st18c7bnnxx
+TARGET_OTA_ASSERT_DEVICE:= st18c10bnnxx
 
 # Enable Minikin text layout engine (will be the default soon)
 USE_MINIKIN := true
