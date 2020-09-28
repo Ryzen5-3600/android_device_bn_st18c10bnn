@@ -101,15 +101,15 @@ PRODUCT_COPY_FILES += \
 
 # Lights
 PRODUCT_PACKAGES +=\
-    lights.mt8163
+    lights.mt8167
 
 # Power
 PRODUCT_PACKAGES +=\
-    power.mt8163
+    power.mt8167
 
 # Thermal
 PRODUCT_PACKAGES +=\
-    thermal.mt8163 \
+    thermal.mt8167 \
     thermal_manager
 
 # Audio Shim
@@ -127,7 +127,7 @@ PRODUCT_PACKAGES += \
 
 # Audio
 PRODUCT_PACKAGES += \
-    audio.r_submix.mt8163 \
+    audio.r_submix.mt8167 \
     audio.usb.default \
     audio.a2dp.default \
     audio_policy.stub \
@@ -279,7 +279,7 @@ PRODUCT_PACKAGES += \
 
 # Light
 PRODUCT_PACKAGES += \
-    lights.mt8163 \
+    lights.mt8167 \
     android.hardware.light@2.0-impl-mediatek \
     android.hardware.light@2.0-service-mediatek
 
@@ -321,4 +321,4 @@ PRODUCT_PACKAGES += \
     android.hardware.health@2.0-service-mediatek
 
 # Inherit vendor
-$(call inherit-product, vendor/bn/st18c7bnn/st18c7bnn-vendor.mk)
+$(call inherit-product, vendor/bn/st18c10bnn/st18c10bnn-vendor.mk)
