@@ -677,3 +677,16 @@ vendor/bin/aee_core_forwarder
 vendor/bin/aee_archivev
 vendor/bin/aee_aedv64
 vendor/bin/aee_aedv
+
+vendor/lib64/libhdrproc.so
+vendor/lib64/libGdmaScalerPipe.so
+vendor/lib64/libblulight_defender.so
+vendor/lib64/hw/vendor.mediatek.hardware.keymanage@1.0-impl.so
+vendor/lib/zterilPara
+vendor/lib/modules/met.ko
+vendor/lib/libblulight_defender.so
+vendor/lib/hw/android.hardware.light@2.0-impl-mediatek.so
+vendor/bin/XoSetCap
+vendor/bin/wfbt_wr
+vendor/bin/hw/vendor.mediatek.hardware.power@1.1-service
+vendor/bin/chat
