@@ -120,10 +120,12 @@ vendor/etc/virtual-spn-conf-by-efgid1.xml
 vendor/etc/virtual-spn-conf-by-efpnn.xml
 vendor/etc/virtual-spn-conf-by-efspn.xml
 vendor/etc/virtual-spn-conf-by-imsi.xml
-vendor/firmware/ROMv2_lm_patch_1_0_hdr.bin
-vendor/firmware/ROMv2_lm_patch_1_1_hdr.bin
-vendor/firmware/WIFI_RAM_CODE_8163
-vendor/firmware/WMT_SOC.cfg
+vendor/firmware/mt6630_ant_m1.cfg
+vendor/firmware/mt6630_patch_e3_0_hdr.bin
+vendor/firmware/mt6630_patch_e3_1_hdr.bin
+vendor/firmware/rgx.fw.signed.22.40.54.30
+vendor/firmware/WIFI_RAM_CODE_MT6630
+vendor/firmware/WMT.CFG
 vendor/lib64/egl/libEGL_mtk.so
 vendor/lib64/egl/libGLESv1_CM_mtk.so
 vendor/lib64/egl/libGLESv2_mtk.so
