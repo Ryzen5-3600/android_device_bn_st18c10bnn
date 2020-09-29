@@ -1,22 +1,23 @@
 # MTK project .rc configure
 
-import init.mt8163.usb.rc
 
 on init
-# Temp Backward compatibility
-    symlink /dev/block/platform/mtk-msdc.0/11230000.MSDC0/by-name/boot /dev/bootimg
-    symlink /dev/block/platform/mtk-msdc.0/11230000.MSDC0/by-name/recovery /dev/recovery
-    symlink /dev/block/platform/mtk-msdc.0/11230000.MSDC0/by-name/secro  /dev/sec_ro
-    symlink /dev/block/platform/mtk-msdc.0/11230000.MSDC0/by-name/kb /dev/kb
-    symlink /dev/block/platform/mtk-msdc.0/11230000.MSDC0/by-name/dkb /dev/dkb
-    symlink /dev/block/platform/mtk-msdc.0/11230000.MSDC0/by-name/seccfg /dev/seccfg
-#    symlink /dev/block/platform/mtk-msdc.0/11230000.MSDC0/by-name/proinfo /dev/pro_info
-#    symlink /dev/block/platform/mtk-msdc.0/11230000.MSDC0/by-name/nvram /dev/nvram
-#    symlink /dev/block/platform/mtk-msdc.0/11230000.MSDC0/by-name/para /dev/misc
-    symlink /dev/block/platform/mtk-msdc.0/11230000.MSDC0/by-name/logo /dev/logo
-    symlink /dev/block/platform/mtk-msdc.0/11230000.MSDC0/by-name/misc2 /dev/misc2
+    mount tmpfs tmpfs /mnt/media_rw/ mode=0755,uid=1000,gid=1000
+    mkdir /mnt/media_rw/usbotg 0700 media_rw media_rw
+    mkdir /storage/usbotg 0700 root root
+    mount tmpfs tmpfs /storage/usbotg mode=0755,uid=1000,gid=1000
 
 on post-fs-data
+
+
+
+
+
+
+
+
+
+
 #Camera
     chmod 0660 /dev/MAINAF
     chown system camera /dev/MAINAF
@@ -29,13 +30,13 @@ on post-fs-data
 
     chmod 0660 /dev/GAF001AF
     chown system camera /dev/GAF001AF
-   
+
     chmod 0660 /dev/DW9714AF
     chown system camera /dev/DW9714AF
-    
+
     chmod 0660 /dev/AD5820AF
     chown system camera /dev/AD5820AF
-    
+
     chmod 0660 /dev/BU64745GWZAF
     chown system camera /dev/BU64745GWZAF
 
@@ -50,9 +51,9 @@ on post-fs-data
     setrlimit 8 4294967295 4294967295
 
 #Define device for ATCID
-    chmod 660 /dev/ttyGS0 
-    chown system /dev/ttyGS0 
-    chmod 660 /dev/ttyGS1 
+    chmod 660 /dev/ttyGS0
+    chown system /dev/ttyGS0
+    chmod 660 /dev/ttyGS1
     chown system /dev/ttyGS1
 	
 service hdmi /system/bin/hdmi
@@ -69,4 +70,9 @@ on init
     # Therefore, if the target doesn't support sd hot-plugging (Ex: the SD card slot in a battery compartment), we need to export SECONDARY_STORAGE in 'boot' section
     #
     # export SECONDARY_STORAGE /storage/sdcard1
+
+service fuse_usbotg /system/bin/sdcard -u 1023 -g 1023 -w 1023 -d /mnt/media_rw/usbotg /storage/usbotg
+    class late_start
+    disabled
+
 

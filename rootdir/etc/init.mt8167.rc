@@ -1,8 +1,8 @@
 # MTK platform .rc configure
 
 import ${ro.mtkrc.path}init.connectivity.rc
+import /vendor/etc/init/hw/init.mt8167.usb.rc
 import /vendor/etc/init/hw/init.project.rc
-import /vendor/etc/init/drm_key_query.rc
 import /FWUpgradeInit.rc
 import /vendor/etc/init/hw/init.aee.rc
 import ${ro.mtkrc.path}init.volte.rc
@@ -16,8 +16,7 @@ import ${ro.mtkrc.path}init.modem.rc
 on early-init
     mount debugfs debugfs /sys/kernel/debug
     chmod 0755 /sys/kernel/debug
-    wait /dev/.coldboot_done 10
-
+    wait /dev/.coldboot_done 1000
 on init
     # Support legacy paths
     symlink /sdcard /mnt/sdcard
@@ -28,6 +27,15 @@ on init
     # BATTERY proc
     chown shell system /proc/mtk_battery_cmd/current_cmd
     chown shell system /proc/mtk_battery_cmd/discharging_cmd
+
+# Temp Backward compatibility
+    symlink /dev/block/platform/bootdevice/by-name/boot /dev/bootimg
+    symlink /dev/block/platform/bootdevice/by-name/recovery /dev/recovery
+    symlink /dev/block/platform/bootdevice/by-name/kb /dev/kb
+    symlink /dev/block/platform/bootdevice/by-name/dkb /dev/dkb
+    symlink /dev/block/platform/bootdevice/by-name/seccfg /dev/seccfg
+    symlink /dev/block/platform/bootdevice/by-name/logo /dev/logo
+    symlink /dev/block/platform/bootdevice/by-name/misc2 /dev/misc2
 
     mkdir /vendor/protect_f 0771 system system
     mkdir /vendor/protect_s 0771 system system
@@ -51,11 +59,8 @@ on init
     symlink /dev/block/platform/bootdevice /dev/block/bootdevice
 
 on charger
-    mkdir /dev/block/platform/mtk-msdc.0
-    symlink ../soc/11230000.mmc /dev/block/platform/mtk-msdc.0/11230000.MSDC0
-    mount ext4 /dev/block/platform/mtk-msdc.0/11230000.MSDC0/by-name/system /system ro wait
-    mount ext4 /dev/block/mntlblk_d1  /system ro wait
-
+    symlink /dev/block/platform/soc/11120000.mmc /dev/block/platform/bootdevice
+    mount ext4 /dev/block/platform/bootdevice/by-name/system /system ro wait
     start kpoc_charger
     start servicemanager
 
@@ -64,8 +69,7 @@ on charger
 
 on fs
     write /proc/bootprof "INIT:Mount_START"
-    mkdir /dev/block/platform/mtk-msdc.0
-    symlink ../soc/11230000.mmc /dev/block/platform/mtk-msdc.0/11230000.MSDC0
+    symlink /dev/block/platform/soc/11120000.mmc /dev/block/platform/bootdevice
     mount_all /vendor/etc/fstab.mt8167
     write /proc/bootprof "INIT:Mount_END"
     write /proc/sys/vm/page-cluster 0
@@ -78,10 +82,6 @@ on fs
 on post-fs
     # Support legacy paths
     symlink /sdcard /storage/sdcard0
-
-    # Support A/B feature for boot region
-    symlink /dev/block/mmcblk0boot0 /dev/block/platform/mtk-msdc.0/11230000.MSDC0/by-name/preloader_a
-    symlink /dev/block/mmcblk0boot1 /dev/block/platform/mtk-msdc.0/11230000.MSDC0/by-name/preloader_b
 
     #change permissions for mediaserver
     chown root media /proc/clkmgr/mipi_test
@@ -132,6 +132,13 @@ on post-fs-data
 
 # -----------------------
 # Add by MTK
+    # md32 boot
+    chown root system /dev/md32
+    chmod 0440 /dev/md32
+    chown root system /sys/class/misc/md32/md32_mobile_log
+    chmod 0660 /sys/class/misc/md32/md32_mobile_log
+    write /sys/class/misc/md32/md32_boot 1
+
     # dhcp server
     mkdir /data/misc/dhcp 0770 dhcp wifi
     chown dhcp wifi /data/misc/dhcp
@@ -171,9 +178,6 @@ on post-fs-data
     chown root diag /sys/module/tpd_debug/parameters/tpd_em_log_to_fs
 
     chmod 0666 /dev/pmem_multimedia
-
-    # watch dog kicker
-    write /proc/wdk "0 20 30 0 1"
 
     # set ptmx group to non-root
     chown root radio /dev/ptmx
@@ -501,17 +505,6 @@ on boot
     chown system system /sys/class/leds/green/trigger
     chown system system /sys/class/leds/blue/trigger
 
-    chown system system /sys/kernel/debug/ged/hal/fps_upper_bound
-    chmod 0660 /sys/kernel/debug/ged/hal/fps_upper_bound
-    chown system system /sys/kernel/debug/ged/hal/vsync_offset_level
-    chmod 0660 /sys/kernel/debug/ged/hal/vsync_offset_level
-    chown system system /sys/kernel/debug/ged/hal/event_notify
-    chmod 0660 /sys/kernel/debug/ged/hal/event_notify
-    chown system system /sys/kernel/debug/ged/hal/custom_upbound_gpu_freq
-    chmod 0660 /sys/kernel/debug/ged/hal/custom_upbound_gpu_freq
-    chown system system /sys/kernel/debug/ged/hal/custom_boost_gpu_freq
-    chmod 0660 /sys/kernel/debug/ged/hal/custom_boost_gpu_freq
-
     # Permission for hibernation
     chown radio system /sys/power/tuxonice
     chown radio system /sys/power/tuxonice/do_hibernate
@@ -566,8 +559,8 @@ on boot
 
 on property:ro.mtk_emmc_support=1
     # Support A/B feature for emmc boot region
-    symlink /dev/block/mmcblk0boot0 /dev/block/platform/mtk-msdc.0/11230000.MSDC0/by-name/preloader_a
-    symlink /dev/block/mmcblk0boot1 /dev/block/platform/mtk-msdc.0/11230000.MSDC0/by-name/preloader_b
+    symlink /dev/block/mmcblk0boot0 /dev/block/platform/bootdevice/by-name/preloader_a
+    symlink /dev/block/mmcblk0boot1 /dev/block/platform/bootdevice/by-name/preloader_b
 
 on property:ro.mtk_ufs_booting=1
     # Support A/B feature for ufs boot region
@@ -632,7 +625,6 @@ on property:dev.bootcomplete=1
     write /sys/power/pm_print_times 0
 
 
-
 # bugreport is triggered by holding down volume down, volume up and power
 service bugreport /system/bin/dumpstate -d -p -B -z \
         -o /data/user_de/0/com.android.shell/files/bugreports/bugreport
@@ -654,21 +646,6 @@ on property:wlan.driver.status=unloaded
     write /dev/wmtWifi "0"
 
 
-
-
-
-
-service pppoe_wlan0 /vendor/bin/launchpppoe
-    user root
-    group radio cache inet misc
-    disabled
-    oneshot
-
-on property:service.pppoe_wlan0.enable=0
-    stop pppoe_wlan0
-
-on property:service.pppoe_wlan0.enable=1
-    start pppoe_wlan0
 # write proc for test sim
     on property:gsm.sim.ril.testsim=0
     write /proc/sys/net/netfilter/nf_conntrack_tcp_no_window_check 0
@@ -695,6 +672,11 @@ on property:service.pppoe_wlan0.enable=1
     write /proc/sys/net/netfilter/nf_conntrack_tcp_no_window_check 1
     write /proc/sys/net/ipv4/tcp_rto_min 400
 
+# open /dev/watchdog
+service watchdogd /sbin/watchdogd  20 10
+    class core
+    seclabel u:r:watchdogd:s0
+
 service bluetoothd /system/bin/bluetoothd -n
     class main
     socket bluetooth stream 660 bluetooth bluetooth
@@ -712,6 +694,19 @@ service bluetoothd /system/bin/bluetoothd -n
 #  External Modme control related services
 #
 
+#
+#  Modem related services (Begin)
+#
+##Add by T.Zh for ppp daemon
+#service pppd /vendor/bin/pppd file /data/misc/ppp/ppp_options
+#    user root
+#    disabled
+#    oneshot
+#
+##
+#
+#  Modem related services (End)
+#
 
 #add for power-off alarm
 #service poad /vendor/bin/poad
@@ -725,17 +720,21 @@ service bluetoothd /system/bin/bluetoothd -n
 #	group gps system radio
 #	class main
 
-chmod 0664 /sys/class/leds/lcd-backlight/brightness
-chown system system /sys/class/leds/red/trigger
-chown system system /sys/class/leds/green/trigger
-chown system system /sys/class/leds/blue/trigger
-
-service cameraserver /system/bin/cameraserver
-		class main
-		user cameraserver
-		group audio camera drmrpc inet media mediadrm net_bt net_bt_admin net_bw_acct sdcard_rw
-		ioprio rt 4
-		writepid /dev/cpuset/foreground/tasks
+# Program binary service
+service program_binary /vendor/bin/program_binary_service
+    class late_start
+    user system
+    group graphics
+    oneshot
 
 service kpoc_charger /system/bin/kpoc_charger
     class charger
+
+service XoSetCap /vendor/bin/XoSetCap
+    user root
+    group system
+    oneshot
+
+on property:service.nvram_init=Ready
+    start XoSetCap
+

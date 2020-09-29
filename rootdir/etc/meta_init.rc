@@ -33,6 +33,8 @@ on early-init
     chmod 0755 /sys/kernel/debug
 #INTERNAL_END
 
+    wait /dev/.coldboot_done 1000
+
 on init
     sysclktz 0
 
@@ -48,6 +50,14 @@ on init
 
     # Link /vendor to /system/vendor for devices without a vendor partition.
     symlink /system/vendor /vendor
+
+# Temp Backward compatibility
+    symlink /dev/block/platform/bootdevice/by-name/boot /dev/bootimg
+    symlink /dev/block/platform/bootdevice/by-name/recovery /dev/recovery
+    symlink /dev/block/platform/bootdevice/by-name/kb /dev/kb
+    symlink /dev/block/platform/bootdevice/by-name/dkb /dev/dkb
+    symlink /dev/block/platform/bootdevice/by-name/seccfg /dev/seccfg
+    symlink /dev/block/platform/bootdevice/by-name/logo /dev/logo
 
     # Mount cgroup mount point for cpu accounting
     mount cgroup none /acct cpuacct
@@ -196,15 +206,35 @@ on late-init
     trigger boot
 
 on fs
+    ## USB configfs
     mkdir /dev/usb-ffs 0770 shell shell
     mkdir /dev/usb-ffs/adb 0770 shell shell
-    mount functionfs adb /dev/usb-ffs/adb uid=2000,gid=2000
-    write /sys/class/android_usb/android0/f_ffs/aliases adb
+    mkdir /config/usb_gadget/g1 0770 shell shell
+    write /config/usb_gadget/g1/idVendor 0x0E8D
+    write /config/usb_gadget/g1/bcdDevice 0x0223
+    write /config/usb_gadget/g1/bcdUSB 0x0200
+    mkdir /config/usb_gadget/g1/strings/0x409 0770
+    write /config/usb_gadget/g1/strings/0x409/manufacturer "mediatek"
+    write /config/usb_gadget/g1/strings/0x409/product "mt6763"
+    write /config/usb_gadget/g1/bDeviceClass 0
+    write /config/usb_gadget/g1/bDeviceSubClass 0
+    write /config/usb_gadget/g1/bDeviceProtocol 0
+    mkdir /config/usb_gadget/g1/functions/mass_storage.usb0
+    mkdir /config/usb_gadget/g1/functions/ffs.adb
+    mkdir /config/usb_gadget/g1/functions/acm.gs0
+    mkdir /config/usb_gadget/g1/functions/acm.gs1
+    mkdir /config/usb_gadget/g1/functions/acm.gs2
+    mkdir /config/usb_gadget/g1/functions/acm.gs3
+    mkdir /config/usb_gadget/g1/configs/b.1 0770 shell shell
+    mkdir /config/usb_gadget/g1/configs/b.1/strings/0x409 0770 shell shell
+    write /config/usb_gadget/g1/configs/b.1/MaxPower 500
+    symlink /config/usb_gadget/g1/configs/b.1 /config/usb_gadget/g1/os_desc/b.1
+
+    write /proc/bootprof "INIT:fs"
 #INTERNAL_START
     write /proc/bootprof "INIT:Mount_START"
-    mkdir /dev/block/platform/mtk-msdc.0
-    symlink ../soc/11230000.mmc /dev/block/platform/mtk-msdc.0/11230000.MSDC0
-    mount_all /vendor/etc/fstab.mt8163 ${ro.mtkrc.path}multi_init.rc
+    symlink /dev/block/platform/soc/11120000.mmc /dev/block/platform/bootdevice
+    mount_all /vendor/etc/fstab.mt8167 ${ro.mtkrc.path}multi_init.rc
     write /proc/bootprof "INIT:Mount_END"
 #INTERNAL_END
 
@@ -256,8 +286,6 @@ on post-fs
     chown system system /vendor/protect_s
     chmod 0770 /vendor/protect_s
 #INTERNAL_END
-    
-
 on post-fs-data
     # We chown/chmod /data again so because mount is run as root + defaults
     chown system system /data
@@ -407,7 +435,13 @@ on boot
     class_start default
 #INTERNAL_END
     class_start core
-
+	
+	#USB configfs
+    mount functionfs adb /dev/usb-ffs/adb uid=2000,gid=2000
+    chown system radio /dev/ttyGS3
+    chmod 0660 /dev/ttyGS3
+    setprop sys.usb.configfs 1
+	
 on nonencrypted
     class_start main
     class_start late_start
@@ -454,10 +488,10 @@ on defaultcrypto
 #   To speed up the booting in meta/factory mode, we don't encrypt the device.
 #   And then handle it as 'unencrypted' state.
 on encrypt && property:ro.mtk_f2fs_enable=0
-    mount ext4 /dev/block/platform/mtk-msdc.0/11230000.MSDC0/by-name/userdata /data noatime nosuid nodev noauto_da_alloc discard wait
+    mount ext4 /dev/block/platform/bootdevice/by-name/userdata /data noatime nosuid nodev noauto_da_alloc discard wait
 
 on encrypt && property:ro.mtk_f2fs_enable=1
-    mount f2fs /dev/block/platform/mtk-msdc.0/11230000.MSDC0/by-name/userdata /data noatime nosuid nodev discard wait
+    mount f2fs /dev/block/platform/bootdevice/by-name/userdata /data noatime nosuid nodev discard wait
 
 on encrypt
     setprop ro.crypto.fake_encrypt 1
@@ -512,24 +546,68 @@ service nvram_daemon /vendor/bin/nvram_daemon
 
 
 #adb,acm
-on property:ro.boot.usbconfig=0
-    write /sys/class/android_usb/android0/iSerial $ro.serialno
-    write /sys/class/android_usb/android0/enable 0
-    write /sys/class/android_usb/android0/idVendor 0e8d
-    write /sys/class/android_usb/android0/idProduct 200E
-    write /sys/class/android_usb/android0/f_acm/instances 1
-    write /sys/class/android_usb/android0/functions adb,acm
-    write /sys/class/android_usb/android0/enable 1
+on property:ro.boot.usbconfig=0 && property:sys.usb.configfs=1
+    write /proc/bootprof "INIT:start adbd"
     start adbd
 
+on property:sys.usb.ffs.ready=1 && property:ro.boot.usbconfig=0 && property:sys.usb.configfs=1
+    write /proc/bootprof "INIT:on property:ro.boot.usbconfig=0"
+    write /config/usb_gadget/g1/UDC "none"
+    write /config/usb_gadget/g1/strings/0x409/serialnumber $ro.serialno
+    write /config/usb_gadget/g1/configs/b.1/strings/0x409/configuration "adb_acm"
+    write /config/usb_gadget/g1/idProduct 0x200E
+    symlink /config/usb_gadget/g1/functions/ffs.adb /config/usb_gadget/g1/configs/b.1/f1
+    symlink /config/usb_gadget/g1/functions/acm.gs0 /config/usb_gadget/g1/configs/b.1/f2
+    write /config/usb_gadget/g1/UDC "musb-hdrc"
+
 #acm
-on property:ro.boot.usbconfig=1
-    write /sys/class/android_usb/android0/enable 0
-    write /sys/class/android_usb/android0/iSerial " "
-    write /sys/class/android_usb/android0/idVendor 0e8d
-    write /sys/class/android_usb/android0/idProduct 2007
-    write /sys/class/android_usb/android0/f_acm/instances 1
-    write /sys/class/android_usb/android0/functions acm
-    write /sys/class/android_usb/android0/bDeviceClass 02
-    write /sys/class/android_usb/android0/enable 1
+on property:ro.boot.usbconfig=1 && property:sys.usb.configfs=1
+    write /proc/bootprof "INIT:on property:ro.boot.usbconfig 1"
+    write /config/usb_gadget/g1/UDC "none"
+    write /config/usb_gadget/g1/strings/0x409/serialnumber " "
+    write /config/usb_gadget/g1/configs/b.1/strings/0x409/configuration "acm"
+    write /config/usb_gadget/g1/idProduct 0x2007
+    write /config/usb_gadget/g1/bDeviceClass 02
+    symlink /config/usb_gadget/g1/functions/acm.gs0 /config/usb_gadget/g1/configs/b.1/f1
+    write /config/usb_gadget/g1/UDC "musb-hdrc"
+
+#META+ELT
+on property:ro.boot.usbconfig=2 && property:sys.usb.configfs=1
+    write /proc/bootprof "INIT:on property:ro.boot.usbconfig 2"
+    write /config/usb_gadget/g1/UDC "none"
+    write /config/usb_gadget/g1/strings/0x409/serialnumber $ro.serialno
+    write /config/usb_gadget/g1/configs/b.1/strings/0x409/configuration "meta_elt"
+    write /config/usb_gadget/g1/idProduct 0x202d
+    symlink /config/usb_gadget/g1/functions/mass_storage.usb0 /config/usb_gadget/g1/configs/b.1/f1
+    symlink /config/usb_gadget/g1/functions/acm.gs0 /config/usb_gadget/g1/configs/b.1/f2
+    symlink /config/usb_gadget/g1/functions/acm.gs3 /config/usb_gadget/g1/configs/b.1/f3
+    write /config/usb_gadget/g1/UDC "musb-hdrc"
+
+#META+ELT+ADB
+on property:ro.boot.usbconfig=3 && property:sys.usb.configfs=1
+    write /proc/bootprof "INIT:start adbd"
+    start adbd
+
+on property:sys.usb.ffs.ready=1 && property:ro.boot.usbconfig=3 && property:sys.usb.configfs=1
+    write /proc/bootprof "INIT:on property:ro.boot.usbconfig 3"
+    write /config/usb_gadget/g1/UDC "none"
+    write /config/usb_gadget/g1/strings/0x409/serialnumber $ro.serialno
+    write /config/usb_gadget/g1/configs/b.1/strings/0x409/configuration "meta_elt_adb"
+    write /config/usb_gadget/g1/idProduct 0x2040
+    write /sys/devices/platform/mt_usb/saving 1
+    symlink /config/usb_gadget/g1/functions/mass_storage.usb0 /config/usb_gadget/g1/configs/b.1/f1
+    symlink /config/usb_gadget/g1/functions/ffs.adb /config/usb_gadget/g1/configs/b.1/f2
+    symlink /config/usb_gadget/g1/functions/acm.gs0 /config/usb_gadget/g1/configs/b.1/f3
+    symlink /config/usb_gadget/g1/functions/acm.gs3 /config/usb_gadget/g1/configs/b.1/f4
+    write /config/usb_gadget/g1/UDC "musb-hdrc"
+
 #INTERNAL_END
+
+service XoSetCap /vendor/bin/XoSetCap
+    user root
+    group system
+    oneshot
+
+on property:service.nvram_init=Ready
+    start XoSetCap
+
