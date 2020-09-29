@@ -76,7 +76,7 @@ ro.mtk_alps_box_support=1
 ro.csc.sales_code=BNN
 
 #for mali
-#ro.hardware.gralloc=mt8163.mali
+#ro.hardware.gralloc=mt8167.mali
 
 
 ro.emdoor.screenoff_time=120000
