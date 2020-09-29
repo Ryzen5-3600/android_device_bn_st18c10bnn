@@ -167,31 +167,6 @@ PRODUCT_PACKAGES += \
     libbluetooth_mtk \
     libbt-vendor 
 
-
-# Ramdisk
-#PRODUCT_COPY_FILES += \
-#    $(LOCAL_PATH)/rootdir/fstab.mt8163:$(TARGET_COPY_OUT_VENDOR)/etc/fstab.mt8163 \
-#    $(LOCAL_PATH)/rootdir/init.mt8163.rc:$(TARGET_COPY_OUT_VENDOR)/etc/init/hw/init.mt8163.rc \
-#    $(LOCAL_PATH)/rootdir/init.mt8163.usb.rc:$(TARGET_COPY_OUT_VENDOR)/etc/init/hw/init.mt8163.usb.rc \
-#    $(LOCAL_PATH)/rootdir/factory_init.connectivity.rc:$(TARGET_COPY_OUT_VENDOR)/etc/init/hw/factory_init.connectivity.rc \
-#    $(LOCAL_PATH)/rootdir/factory_init.project.rc:$(TARGET_COPY_OUT_VENDOR)/etc/init/hw/factory_init.project.rc \
-#    $(LOCAL_PATH)/rootdir/factory_init.rc:$(TARGET_COPY_OUT_VENDOR)/etc/init/hw/factory_init.rc \
-#    $(LOCAL_PATH)/rootdir/init.connectivity.rc:$(TARGET_COPY_OUT_VENDOR)/etc/init/hw/init.connectivity.rc \
-#    $(LOCAL_PATH)/rootdir/init.modem.rc:$(TARGET_COPY_OUT_VENDOR)/etc/init/hw/init.modem.rc \
-#    $(LOCAL_PATH)/rootdir/init.project.rc:$(TARGET_COPY_OUT_VENDOR)/etc/init/hw/init.project.rc \
-#    $(LOCAL_PATH)/rootdir/init.sensor_1_0.rc:$(TARGET_COPY_OUT_VENDOR)/etc/init/hw/init.sensor_1_0.rc \
-#    $(LOCAL_PATH)/rootdir/meta_init.connectivity.rc:$(TARGET_COPY_OUT_VENDOR)/etc/init/hw/meta_init.connectivity.rc \
-#    $(LOCAL_PATH)/rootdir/meta_init.modem.rc:$(TARGET_COPY_OUT_VENDOR)/etc/init/hw/meta_init.modem.rc \
-#    $(LOCAL_PATH)/rootdir/meta_init.project.rc:$(TARGET_COPY_OUT_VENDOR)/etc/init/hw/meta_init.project.rc \
-#    $(LOCAL_PATH)/rootdir/meta_init.rc:$(TARGET_COPY_OUT_VENDOR)/etc/init/hw/meta_init.rc \
-#    $(LOCAL_PATH)/rootdir/multi_init.rc:$(TARGET_COPY_OUT_VENDOR)/etc/init/hw/multi_init.rc \
-#    $(LOCAL_PATH)/rootdir/ueventd.qcom.rc:$(TARGET_COPY_OUT_VENDOR)/etc/init/hw/ueventd.qcom.rc \
-#    $(LOCAL_PATH)/rootdir/fstab.enableswap:root/fstab.enableswap \
-#    $(LOCAL_PATH)/rootdir/init.mt8163.usb.rc:root/init.mt8163.usb.rc \
-#    $(LOCAL_PATH)/rootdir/init.recovery.mt8163.rc:root/init.recovery.mt8163.rc 
-    
-#$(LOCAL_PATH)/rootdir/fstab.mt8163:root/fstab.mt8163
-
 #    $(LOCAL_PATH)/rootdir/ueventd.mt8163.rc:$(TARGET_COPY_OUT_VENDOR)/ueventd.rc \
 # Libshims
 #PRODUCT_PACKAGES += \
@@ -208,7 +183,7 @@ PRODUCT_PACKAGES += \
 #include $(LOCAL_PATH)/libhidl/Android.bp
 
 # System Prop
-include $(LOCAL_PATH)/vendor_prop.mk
+#include $(LOCAL_PATH)/vendor_prop.mk
 
 
 # call dalvik heap config
