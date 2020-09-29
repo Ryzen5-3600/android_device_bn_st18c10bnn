@@ -244,13 +244,15 @@ PRODUCT_PACKAGES += \
     android.hardware.graphics.mapper@2.0-impl \
     android.hardware.graphics.composer@2.1-impl \
     android.hardware.graphics.composer@2.1-service \
-    android.hardware.memtrack@1.0-impl 
+    android.hardware.memtrack@1.0-impl \
+    android.hardware.memtrack@1.0-service
 
 # DRM
 PRODUCT_PACKAGES += \
     libdrm \
     libmockdrmcryptoplugin \
-    android.hardware.drm@1.0-impl 
+    android.hardware.drm@1.0-impl \
+    android.hardware.drm@1.0-service 
 
 # Fingerprint
 PRODUCT_PACKAGES += \
@@ -286,7 +288,9 @@ PRODUCT_PACKAGES += \
 # Thermal
 PRODUCT_PACKAGES += \
     android.hardware.thermal@1.0 \
+    android.hardware.thermal@1.0-impl \
     android.hardware.thermal@1.1 \
+    android.hardware.thermal@1.0-service
 
 # USB HAL 
 PRODUCT_PACKAGES += \
