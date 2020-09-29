@@ -690,3 +690,12 @@ vendor/bin/XoSetCap
 vendor/bin/wfbt_wr
 vendor/bin/hw/vendor.mediatek.hardware.power@1.1-service
 vendor/bin/chat
+
+# Permissions
+vendor/etc/permissions/android.hardware.location.xml
+vendor/etc/permissions/android.hardware.microphone.xml
+vendor/etc/permissions/android.hardware.vulkan.version.xml
+vendor/etc/permissions/android.hardware.vulkan.level.xml
+vendor/etc/permissions/android.hardware.opengles.aep.xml
+vendor/etc/permissions/android.hardware.sensor.light.xml
+vendor/etc/permissions/android.hardware.sensor.proximity.xml
