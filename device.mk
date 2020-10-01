@@ -187,7 +187,7 @@ PRODUCT_PACKAGES += \
 
 
 # call dalvik heap config
-$(call inherit-product, frameworks/native/build/tablet-7in-hdpi-1024-dalvik-heap.mk)
+$(call inherit-product, frameworks/native/build/tablet-10in-xhdpi-2048-dalvik-heap.mk)
 
 # call hwui memory config
 #$(call inherit-product-if-exists, frameworks/native/build/phone-xxhdpi-2048-hwui-memory.mk)
@@ -228,10 +228,6 @@ PRODUCT_PACKAGES += \
     libmockdrmcryptoplugin \
     android.hardware.drm@1.0-impl \
     android.hardware.drm@1.0-service 
-
-# Fingerprint
-PRODUCT_PACKAGES += \
-    android.hardware.biometrics.fingerprint@2.1-service
 
 # FM
 PRODUCT_PACKAGES += \
