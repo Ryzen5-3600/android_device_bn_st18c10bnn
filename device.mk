@@ -167,6 +167,10 @@ PRODUCT_PACKAGES += \
     libbluetooth_mtk \
     libbt-vendor 
 
+# MTKRC Path
+PRODUCT_DEFAULT_PROPERTY_OVERRIDES += \
+    ro.mtkrc.path=/vendor/etc/init/hw/ \
+
 #    $(LOCAL_PATH)/rootdir/ueventd.mt8163.rc:$(TARGET_COPY_OUT_VENDOR)/ueventd.rc \
 # Libshims
 #PRODUCT_PACKAGES += \
@@ -183,7 +187,7 @@ PRODUCT_PACKAGES += \
 #include $(LOCAL_PATH)/libhidl/Android.bp
 
 # System Prop
-#include $(LOCAL_PATH)/vendor_prop.mk
+include $(LOCAL_PATH)/vendor_prop.mk
 
 
 # call dalvik heap config

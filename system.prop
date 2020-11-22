@@ -1,10 +1,3 @@
-#
-# from device/southerntelecom/st18c10bnn/system.prop
-#
-#
-# system.prop for generic sdk
-#
-
 rild.libpath=mtk-ril.so
 rild.libargs=-d /dev/ttyC0
 
@@ -29,7 +22,7 @@ mediatek.wlan.ctia=0
 wifi.tethering.interface=ap0
 #
 
-ro.opengles.version=196609
+ro.opengles.version=196610
 
 wifi.direct.interface=p2p0
 dalvik.vm.heapgrowthlimit=128m
@@ -66,23 +59,17 @@ ro.boot.selinux=disable
 # Disable dirty region for Mali
 debug.hwui.render_dirty_regions=false
 
-ro.sf.lcd_density=160
+ro.sf.lcd_density=240
 
 # disable ipo for development
 sys.ipo.disable=1
 
-ro.mtk_alps_box_support=1
-
-ro.csc.sales_code=BNN
-
 #for mali
 #ro.hardware.gralloc=mt8167.mali
 
-
-ro.emdoor.screenoff_time=120000
-ro.config.def_brightness=75
-
+#persist.sys.timezone=America/New_York
+ro.product.mtpDeviceLable=BNTV650
+#for hwc disable rotate ct for lcm
+ro.hwc.disable_rotate_for_lcm=1
+ro.csc.sales_code=BNN
 ro.com.google.clientidbase = android-southerntelecom
-persist.logd.size=1048576
-
-#
